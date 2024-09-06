@@ -67,6 +67,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: appjar
+          path: web/target
 
       - name: Debug deploy environment
         run: pwd; ls -R
