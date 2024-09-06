@@ -31,20 +31,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        cache: maven
-    - name: Build with Maven
-      run: mvn -B -DskipTests=true package --file web/pom.xml
+      - uses: actions/checkout@v4
 
-    - uses: actions/upload-artifact@v1
-      with:
-        name: appjar
-        path: web/target/SpringbootLoginQiita-0.0.1-SNAPSHOT.jar
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build with Maven
+        run: mvn -B -DskipTests=true package --file web/pom.xml
+
+      - uses: actions/upload-artifact@v1
+        with:
+          name: appjar
+          path: web/target/SpringbootLoginQiita-0.0.1-SNAPSHOT.jar
+
+      - name: Debug build environment
+        run: pwd; ls -R
 
     # # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     # - name: Update dependency graph
@@ -52,12 +57,19 @@ jobs:
     #   with:
     #     directory: ${{ matrix.directory }}/web
 
-  # deploy:
-  #   runs-on: ubuntu-latest
-  #   needs: build
-  #   environment: production
-  #   steps:
-  #     - uses: actions/checkout@v4
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v1
+        with:
+          name: appjar
+
+      - name: Debug deploy environment
+        run: pwd; ls -R
 
   #     - name: Configure AWS credentials
   #       uses: aws-actions/configure-aws-credentials@v1
