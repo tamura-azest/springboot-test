@@ -102,8 +102,8 @@ jobs:
         with:
           # 元になるTaskDefinitionファイルのパス
           task-definition: ./.aws/ecs_task-definitions.json
-          # コンテナ名
-          container-name: $ECS_CONTAINER_NAME
+          # # コンテナ名
+          # container-name: $ECS_CONTAINER_NAME
           # 新しいイメージ名とタグ
           image: ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:${{ github.sha }}
             
