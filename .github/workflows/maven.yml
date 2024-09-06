@@ -43,13 +43,13 @@ jobs:
       - name: Build with Maven
         run: mvn -B -DskipTests=true package --file web/pom.xml
 
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v4
         with:
           name: appjar
           path: web/target/SpringbootLoginQiita-0.0.1-SNAPSHOT.jar
 
-      - name: Debug build environment
-        run: pwd; ls -R
+      # - name: Debug build environment
+      #   run: pwd; ls -R
 
     # # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     # - name: Update dependency graph
@@ -64,12 +64,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/download-artifact@v1
+      - uses: actions/download-artifact@v4
         with:
           name: appjar
 
-      - name: Debug deploy environment
-        run: pwd; ls -R
+      # - name: Debug deploy environment
+      #   run: pwd; ls -R
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
