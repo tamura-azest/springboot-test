@@ -21,7 +21,7 @@ env:
   ECS_CLUSTER: tamura-tf-ecs-cluster                 # set this to your Amazon ECS cluster name
   ECS_TASK_DEFINITION: .aws/task-definition.json # set this to the path to your Amazon ECS task definition
                                                # file, e.g. .aws/task-definition.json
-  CONTAINER_NAME: tamura-fargate-springboot           # set this to the name of the container in the
+  ECS_CONTAINER_NAME: tamura-fargate-springboot           # set this to the name of the container in the
                                                # containerDefinitions section of your task definition
 
 
@@ -102,8 +102,8 @@ jobs:
         with:
           # 元になるTaskDefinitionファイルのパス
           task-definition: ./.aws/ecs_task-definitions.json
-          # # コンテナ名
-          # container-name: $ECS_CONTAINER_NAME
+          # コンテナ名
+          container-name: $ECS_CONTAINER_NAME
           # 新しいイメージ名とタグ
           image: ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:${{ github.sha }}
             
