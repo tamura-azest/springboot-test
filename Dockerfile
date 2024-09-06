@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # copy a jvm app.
-COPY web/target/*.jar app.jar
+COPY appjar/*.jar app.jar
 
 # open port 8080 for a jvm app.
 EXPOSE 8080
