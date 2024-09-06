@@ -96,22 +96,27 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-      - uses: aws-actions/amazon-ecs-render-task-definition@v1
-        # あとで参照するのでid
-        id: render-web-container
-        with:
-          # 元になるTaskDefinitionファイルのパス
-          task-definition: ./.aws/ecs_task-definitions.json
-          # コンテナ名
-          container-name: ${{ env.ECS_CONTAINER_NAME }}
-          # 新しいイメージ名とタグ
-          image: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+      - name: Update service
+        run: |
+          aws ecs update-service --cluster ${{ env.ECS_CLUSTER }} --service ${{ env.ECS_SERVICE }} --force-new-deployment
+          
+
+      # - uses: aws-actions/amazon-ecs-render-task-definition@v1
+      #   # あとで参照するのでid
+      #   id: render-web-container
+      #   with:
+      #     # 元になるTaskDefinitionファイルのパス
+      #     task-definition: ./.aws/ecs_task-definitions.json
+      #     # コンテナ名
+      #     container-name: ${{ env.ECS_CONTAINER_NAME }}
+      #     # 新しいイメージ名とタグ
+      #     image: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
             
-      - name: Deploy Amazon ECS task definition
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        with:
-          task-definition: ${{ steps.render-web-container.outputs.task-definition }}
-          service: ${{ env.ECS_SERVICE }}
-          cluster: ${{ env.ECS_CLUSTER }}
-          wait-for-service-stability: true
+      # - name: Deploy Amazon ECS task definition
+      #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      #   with:
+      #     task-definition: ${{ steps.render-web-container.outputs.task-definition }}
+      #     service: ${{ env.ECS_SERVICE }}
+      #     cluster: ${{ env.ECS_CLUSTER }}
+      #     wait-for-service-stability: true
         
